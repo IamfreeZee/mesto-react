@@ -2,8 +2,6 @@ import { useState, useEffect } from "react"
 import { api } from "../../utils/api.js";
 import { Card } from "../Card/Card.jsx";
 
-// let userId = '';
-
 function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick }) {
   
   const [userName, setUserName] = useState('')
@@ -14,16 +12,14 @@ function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick }) {
   // запрос данных о пользователе и массива изначальных карточек
   useEffect(() => {
     api.getData()
-    .then(([userDataObj, cardsArray]) => {
-      // userId = userDataObj._id
-      setUserName(userDataObj.name)
-      setUserDescription(userDataObj.about)
-      setUserAvatar(userDataObj.avatar)
-      cardsArray.forEach((card) => {
-        card.userId = userDataObj._id
+    .then(([userData, cardsData]) => {
+      setUserName(userData.name)
+      setUserDescription(userData.about)
+      setUserAvatar(userData.avatar)
+      cardsData.forEach((card) => {
+        card.userId = userData._id
       })
-      setCards(cardsArray)
-      // console.dir(cardsArray)
+      setCards(cardsData)
     })
     .catch((err) => {
       console.error(`Что-то пошло не так: ${err}`)
@@ -33,7 +29,7 @@ function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick }) {
   return (
     <main className="content">
       <section className="profile">
-        <button className="profile__avatar" type="button" onClick={ onEditAvatar } style={{ backgroundImage: `url(${userAvatar})` }}/>
+        <button className="profile__avatar" type="button" onClick={ onEditAvatar } style={{backgroundImage: `url(${ userAvatar })`}}/>
         <div className="profile__info">
           <div className="profile__text-area">
             <h1 className="profile__user-name">{ userName }</h1>
@@ -46,8 +42,12 @@ function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick }) {
       <section className="cards" aria-label="Карточки">
         <ul className="cards__list">
           {cards.map((cardData) => {
-            return (<Card key={ cardData._id } card={ cardData } onCardClick={ onCardClick } />)
-          })}
+            return (<Card 
+                      key={ cardData._id } 
+                      card={ cardData } 
+                      onCardClick={ onCardClick } 
+                    />
+          )})}
         </ul>
       </section>
     </main>

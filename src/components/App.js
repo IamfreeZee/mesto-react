@@ -10,8 +10,8 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddNewCardPopupOpen, setIsAddNewCardPopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isZoomImagePopupOpen, setIsZoomImagePopupOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(false);
+  const [isImagePopupOpen, setisImagePopupOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState({});
 
   function handleEditProfileClick () {
     setIsEditProfilePopupOpen(true)
@@ -27,14 +27,14 @@ function App() {
 
   function handleCardClick (card) {
     setSelectedCard(card)
-    setIsZoomImagePopupOpen(true)
+    setisImagePopupOpen(true)
   } 
 
   function closeAllPopups () {
     setIsEditProfilePopupOpen(false)
     setIsAddNewCardPopupOpen(false)
     setIsEditAvatarPopupOpen(false)
-    setIsZoomImagePopupOpen(false)
+    setisImagePopupOpen(false)
     // setSelectedCard(false)
   }
 
@@ -137,7 +137,7 @@ function App() {
       <ImagePopup
         name="zoom-image"
         card={ selectedCard }
-        isOpen={ isZoomImagePopupOpen }
+        isOpen={ isImagePopupOpen }
         onClose={ closeAllPopups }
       >
 
