@@ -3,7 +3,7 @@ import { Header } from "./Header/Header.jsx";
 import { Footer } from "./Footer/Footer.jsx";
 import { Main } from "./Main/Main.jsx";
 import { PopupWithForm } from "./PopupWithForm/PopupWithForm.jsx";
-import { PopupZoomImage } from "./PopupZoomImage/PopupZoomImage.jsx";
+import { ImagePopup } from "./ImagePopup/ImagePopup.jsx";
 
 function App() {
 
@@ -134,14 +134,14 @@ function App() {
 
       </PopupWithForm>
 
-      <PopupZoomImage
+      <ImagePopup
         name="zoom-image"
         card={ selectedCard }
         isOpen={ isZoomImagePopupOpen }
         onClose={ closeAllPopups }
       >
 
-      </PopupZoomImage>
+      </ImagePopup>
 
     </div>
   )
