@@ -18,9 +18,18 @@ function App() {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [isImagePopupOpen, setIsImagePopupOpen] = useState(false);
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
+  
+  // стейт текущего пользователя для контекста
+  const [currentUser, setCurrentUser] = useState({});
+  
+  // стейт изначальных карточек
+  const [cards, setCards] = useState([])
 
   // стейт кликнутой карточки
   const [selectedCard, setSelectedCard] = useState({})
+
+  // стейт для удаления карточки
+  const [deleteCard, setDeleteCard] = useState({})
 
   // клик по иконке редактирования профиля
   function handleEditProfileClick () {
@@ -57,12 +66,6 @@ function App() {
     setIsDeleteCardPopupOpen(false)
   }
 
-  // стейт текущего пользователя для контекста
-  const [currentUser, setCurrentUser] = useState({});
-  
-  // стейт изначальных карточек
-  const [cards, setCards] = useState([])
-  
   // задание значений стейтам текущего пользователя и изначальных карточек
   useEffect(() => {
     api.getData()
@@ -74,9 +77,42 @@ function App() {
       console.error(`Что-то пошло не так: ${err}`)
     })
   }, [])
-
-  // стейт для удаления карточки
-  const [deleteCard, setDeleteCard] = useState({})
+  
+  // обновление данных о текущем пользователе
+  function handleUpdateUser (userData) {
+    api.setUserInfo(userData)
+    .then((res) => {
+      setCurrentUser(res)
+      closeAllPopups()
+    })
+    .catch((err) => {
+      console.error(`Что-то пошло не так: ${err}`)
+    })
+  }
+  
+  // обновление аватара текущего пользователя
+  function handleUpdateAvatar (avatarData) {
+    api.setUserAvatar(avatarData)
+    .then((res) => {
+      setCurrentUser(res)
+      closeAllPopups()
+    })
+    .catch((err) => {
+      console.error(`Что-то пошло не так: ${err}`)
+    })
+  }
+  
+  // добавление новой карточки
+  function handleAddCard (cardData) {
+    api.addNewCard(cardData)
+    .then((res) => {
+      setCards([res, ...cards])
+      closeAllPopups()
+    })
+    .catch((err) => {
+      console.error(`Что-то пошло не так: ${err}`)
+    })
+  }
   
   // удаление карточки
   function handleCardDelete (evt) {
@@ -90,45 +126,7 @@ function App() {
       console.error(`Что-то пошло не так: ${err}`)
     })
   }
-
-  // обновление данных о текущем пользователе
-  function handleUpdateUser (userData) {
-    api.setUserInfo(userData)
-    .then((res) => {
-      setCurrentUser(res)
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
-  }
-
-  // обновление аватара текущего пользователя
-  function handleUpdateAvatar (avatarData) {
-    api.setUserAvatar(avatarData)
-    .then((res) => {
-      setCurrentUser(res)
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
-  }
-
-  // добавление новой карточки
-  function handleAddCard (cardData) {
-    api.addNewCard(cardData)
-    .then((res) => {
-      setCards([res, ...cards])
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
-  }
-
-
-
+  
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__content">

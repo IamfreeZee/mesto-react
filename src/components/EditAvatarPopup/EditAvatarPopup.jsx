@@ -1,4 +1,4 @@
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { PopupWithForm } from "../PopupWithForm/PopupWithForm"
 
 function EditAvatarPopup ({ isOpen, onClose, onUpdateAvatar }) {
@@ -6,11 +6,15 @@ function EditAvatarPopup ({ isOpen, onClose, onUpdateAvatar }) {
   // реф инпута
   const userAvatar = useRef()
 
+  // установка значений в инпуты формы
+  useEffect(() => {
+    userAvatar.current.value = ''
+  }, [isOpen]);
+
   // отправка формы обновления аватара юзера
   function handleSubmit (evt) {
     evt.preventDefault()
     onUpdateAvatar({[userAvatar.current.name]: userAvatar.current.value})
-    evt.target.reset()
   }
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { PopupWithForm } from "../PopupWithForm/PopupWithForm"
 
 function AddPlacePopup ({ isOpen, onClose, onAddCard }) {
@@ -11,15 +11,16 @@ function AddPlacePopup ({ isOpen, onClose, onAddCard }) {
     setInputsValues({...inputsValues, [evt.target.name]: evt.target.value})
   }
 
+  // установка значений в инпуты формы
+  useEffect(() => {
+    setInputsValues({})
+  }, [isOpen]);
+
   // отправка формы добавления новой карточки
   function handleSubmit (evt) {
     evt.preventDefault()
     onAddCard(inputsValues)
-    setInputsValues({})
-    evt.target.reset()
   }
-
-
 
   return (
     <PopupWithForm 
@@ -37,8 +38,8 @@ function AddPlacePopup ({ isOpen, onClose, onAddCard }) {
         id="cardName"
         minLength={2}
         maxLength={30}
-        required=""
-        value={ inputsValues.cardName }
+        required
+        value={ inputsValues.cardName || '' }
         onChange={ handleInputChange }
       />
       <span className="popup__error" id="cardName-error" />
@@ -48,8 +49,8 @@ function AddPlacePopup ({ isOpen, onClose, onAddCard }) {
         type="url"
         name="cardLink"
         id="cardLink"
-        required=""
-        value={ inputsValues.cardLink }
+        required
+        value={ inputsValues.cardLink || '' }
         onChange={ handleInputChange }
       />
       <span className="popup__error" id="cardLink-error" />
