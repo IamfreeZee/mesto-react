@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
 import { api } from "../../utils/api"
 
-function Card ({ cardData, onCardClick, onDeleteCard, setCardsState, setDeleteCard }) {
+function Card ({ cardData, onCardClick, onDeleteCard, setCardsState, setDeletedCard }) {
 
   // контекст текущего юзера
   const currentUser = useContext(CurrentUserContext)
@@ -21,7 +21,7 @@ function Card ({ cardData, onCardClick, onDeleteCard, setCardsState, setDeleteCa
   // клик по мусорке записывает данные карточки в стейт для удаления 
   function handleDeleteCkick () {
     onDeleteCard()
-    setDeleteCard(cardData)
+    setDeletedCard(cardData)
   }
 
   // поставить||снять лайк

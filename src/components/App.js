@@ -4,11 +4,11 @@ import { api } from '../utils/api.js';
 import { Header } from "./Header/Header.jsx";
 import { Footer } from "./Footer/Footer.jsx";
 import { Main } from "./Main/Main.jsx";
-import { PopupWithForm } from "./PopupWithForm/PopupWithForm.jsx";
 import { ImagePopup } from "./ImagePopup/ImagePopup.jsx";
 import { EditProfilePopup } from './EditProfilePopup/EditProfilePopup.jsx';
 import { EditAvatarPopup } from './EditAvatarPopup/EditAvatarPopup.jsx';
 import { AddPlacePopup } from './AddPlacePopup/AddPlacePopup.jsx';
+import { ConfirmationPopup } from './ConfirmationPopup/ConfirmationPopup.jsx';
 
 function App() {
 
@@ -29,7 +29,7 @@ function App() {
   const [selectedCard, setSelectedCard] = useState({})
 
   // стейт для удаления карточки
-  const [deleteCard, setDeleteCard] = useState({})
+  const [deletedCard, setDeletedCard] = useState({})
 
   // клик по иконке редактирования профиля
   function handleEditProfileClick () {
@@ -115,11 +115,10 @@ function App() {
   }
   
   // удаление карточки
-  function handleCardDelete (evt) {
-    evt.preventDefault()
-    api.deleteCard(deleteCard._id)
+  function handleDeleteCard (cardData) {
+    api.deleteCard(cardData._id)
     .then((res) => {
-      setCards((cards) => cards.filter((item) => item._id !== deleteCard._id))
+      setCards((cards) => cards.filter((item) => item._id !== cardData._id))
       closeAllPopups()
     })
     .catch((err) => {
@@ -141,7 +140,7 @@ function App() {
           onDeleteCard={ handleDeleteCardClick }
           cards={ cards }
           setCardsState={ setCards }
-          setDeleteCard={ setDeleteCard }
+          setDeletedCard={ setDeletedCard }
         >
 
         </Main>
@@ -172,16 +171,6 @@ function App() {
 
         </AddPlacePopup>
 
-        <PopupWithForm 
-          name="delete-card" 
-          title="Вы уверены?" 
-          isOpen={ isDeleteCardPopupOpen }
-          onClose={ closeAllPopups }
-          onSubmit={ handleCardDelete }
-        >
-
-        </PopupWithForm>
-
         <ImagePopup
           name="zoom-image"
           card={ selectedCard }
@@ -190,6 +179,15 @@ function App() {
         >
 
         </ImagePopup>
+
+        <ConfirmationPopup
+          isOpen={ isDeleteCardPopupOpen }
+          onClose={ closeAllPopups }
+          onConfirm={ handleDeleteCard }
+          deletedCard={ deletedCard }
+        >
+
+        </ConfirmationPopup>
 
       </div>
     </CurrentUserContext.Provider>

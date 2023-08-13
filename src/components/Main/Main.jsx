@@ -2,7 +2,7 @@ import { useContext } from "react"
 import { Card } from "../Card/Card.jsx";
 import { CurrentUserContext } from "../../contexts/CurrentUserContext.jsx";
 
-function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick, onDeleteCard, cards, setCardsState, setDeleteCard }) {
+function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick, onDeleteCard, cards, setCardsState, setDeletedCard }) {
 
   // подписка на контекст текущего пользователя
   const currentUser = useContext(CurrentUserContext)
@@ -29,7 +29,7 @@ function Main ({ onEditProfile, onAddNewCard, onEditAvatar, onCardClick, onDelet
               onCardClick={ onCardClick } 
               onDeleteCard={ onDeleteCard } 
               setCardsState={ setCardsState }
-              setDeleteCard={ setDeleteCard }
+              setDeletedCard={ setDeletedCard }
             />)})}
         </ul>
       </section>
