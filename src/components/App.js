@@ -20,7 +20,7 @@ function App() {
   const [isDeleteCardPopupOpen, setIsDeleteCardPopupOpen] = useState(false);
   
   // стейт текущего пользователя для контекста
-  const [currentUser, setCurrentUser] = useState({});
+  const [currentUser, setCurrentUser] = useState({})
   
   // стейт изначальных карточек
   const [cards, setCards] = useState([])
@@ -69,61 +69,85 @@ function App() {
   // задание значений стейтам текущего пользователя и изначальных карточек
   useEffect(() => {
     api.getData()
-    .then(([userData, cardsData]) => {
-      setCurrentUser(userData)
-      setCards(cardsData)
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
+      .then(([userData, cardsData]) => {
+        setCurrentUser(userData)
+        setCards(cardsData)
+      })
+      .catch((err) => {
+        console.error(`Что-то пошло не так: ${err}`)
+      })
   }, [])
   
   // обновление данных о текущем пользователе
   function handleUpdateUser (userData) {
     api.setUserInfo(userData)
-    .then((res) => {
-      setCurrentUser(res)
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
+      .then((res) => {
+        setCurrentUser(res)
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.error(`Что-то пошло не так: ${err}`)
+      })
   }
   
   // обновление аватара текущего пользователя
   function handleUpdateAvatar (avatarData) {
     api.setUserAvatar(avatarData)
-    .then((res) => {
-      setCurrentUser(res)
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
+      .then((res) => {
+        setCurrentUser(res)
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.error(`Что-то пошло не так: ${err}`)
+      })
   }
   
   // добавление новой карточки
   function handleAddCard (cardData) {
     api.addNewCard(cardData)
-    .then((res) => {
-      setCards([res, ...cards])
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
+      .then((res) => {
+        setCards([res, ...cards])
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.error(`Что-то пошло не так: ${err}`)
+      })
   }
   
   // удаление карточки
   function handleDeleteCard (cardData) {
     api.deleteCard(cardData._id)
-    .then((res) => {
-      setCards((cards) => cards.filter((item) => item._id !== cardData._id))
-      closeAllPopups()
-    })
-    .catch((err) => {
-      console.error(`Что-то пошло не так: ${err}`)
-    })
+      .then((res) => {
+        setCards((cards) => cards.filter((item) => item._id !== cardData._id))
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.error(`Что-то пошло не так: ${err}`)
+      })
+  }
+
+  // поставить||снять лайк
+  function handleCardLike (cardData) {
+    // проверка ставил ли текущий юзер лайк на этой карточке
+    const isLiked = cardData.likes.some((item) => {return (item._id === currentUser._id)})
+
+    if (isLiked === true) {
+      api.deleteLike(cardData._id)
+        .then((res) => {
+          setCards((state) => state.map((item) => (item._id === cardData._id) ? res : item))
+        })
+        .catch((err) => {
+          console.error(`Что-то пошло не так: ${err}`)
+        })
+      } else {
+      api.putLike(cardData._id)
+        .then((res) => {
+          setCards((state) => state.map((item) => (item._id === cardData._id) ? res : item))
+        })
+        .catch((err) => {
+          console.error(`Что-то пошло не так: ${err}`)
+        })
+      }
   }
   
   return (
@@ -138,8 +162,8 @@ function App() {
           onEditAvatar={ handleEditAvatarClick }
           onCardClick={ handleCardClick }
           onDeleteCard={ handleDeleteCardClick }
+          onCardLike={ handleCardLike }
           cards={ cards }
-          setCardsState={ setCards }
           setDeletedCard={ setDeletedCard }
         >
 

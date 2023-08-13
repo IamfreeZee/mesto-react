@@ -1,8 +1,7 @@
 import { useContext } from "react"
 import { CurrentUserContext } from "../../contexts/CurrentUserContext"
-import { api } from "../../utils/api"
 
-function Card ({ cardData, onCardClick, onDeleteCard, setCardsState, setDeletedCard }) {
+function Card ({ cardData, onCardClick, onDeleteCard, onCardLike, setDeletedCard }) {
 
   // контекст текущего юзера
   const currentUser = useContext(CurrentUserContext)
@@ -24,27 +23,11 @@ function Card ({ cardData, onCardClick, onDeleteCard, setCardsState, setDeletedC
     setDeletedCard(cardData)
   }
 
-  // поставить||снять лайк
-  function handleCardLike () {
-    if (isLiked === true) {
-      api.deleteLike(cardData._id)
-        .then((res) => {
-          setCardsState((state) => state.map((item) => item._id === cardData._id ? res : item))
-        })
-        .catch((err) => {
-          console.error(`Что-то пошло не так: ${err}`)
-        })
-    } else {
-      api.putLike(cardData._id)
-        .then((res) => {
-          setCardsState((state) => state.map((item) => item._id === cardData._id ? res : item))
-        })
-        .catch((err) => {
-          console.error(`Что-то пошло не так: ${err}`)
-        })
-    }
+  // обработчик клика по лайку
+  function handleLikeClick () {
+    onCardLike(cardData)
   }
-  
+
   return (
     <li className="card">
       {(isOwnCard === true) ? <button className="card__button-delete" type="button" onClick={ handleDeleteCkick } /> : ''}
@@ -52,7 +35,7 @@ function Card ({ cardData, onCardClick, onDeleteCard, setCardsState, setDeletedC
       <div className="card__text-area">
         <h2 className="card__caption">{ cardData.name }</h2>
         <div>
-          <button className={`card__button-like ${(isLiked === true) ? "card__button-like_active" : ''}`} type="button" onClick={ handleCardLike } />
+          <button className={`card__button-like ${(isLiked === true) ? "card__button-like_active" : ''}`} type="button" onClick={ handleLikeClick } />
           <p className="card__like-counter">{ cardData.likes.length }</p>
         </div>
       </div>
